@@ -31,7 +31,12 @@ class MozillaTTS(TTS):
         self.type = 'wav'
 
     def get_tts(self, sentence, wav_file):
-        response = requests.get(self.url, params={'text': sentence})
+        if (self.voice is None):
+            response = requests.get(self.url, params={'text': sentence})
+        else:
+            response = requests.get(self.url, params={'text': sentence,
+                                                    'speaker_id': self.voice})
+
         with open(wav_file, 'wb') as f:
             f.write(response.content)
         return (wav_file, None)  # No phonemes
